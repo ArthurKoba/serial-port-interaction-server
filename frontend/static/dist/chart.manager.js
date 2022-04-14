@@ -10,31 +10,32 @@ class ManagedChart {
 
   _render() {
     this._nodes.base = document.createElement('div')
-    this._nodes.base.classList.add(
-        'chart','border', 'border-secondary', 'rounded','col-6', 'p-0', 'd-none')
+    this._nodes.base.classList.add('chart','col-6', 'p-0', 'd-none')
+
+    this._nodes.container = document.createElement('div')
+    this._nodes.container.classList.add('m-1', 'border', 'border-secondary', 'rounded')
+    this._nodes.base.appendChild(this._nodes.container)
 
     this._nodes.chartContainer = document.createElement('div')
     this._nodes.chartContainer.classList.add('p-2')
     this._nodes.chartContainer.appendChild(this._chart.node)
 
-
+    this._nodes.resetButton = this._getButton("Reset Scales")
+    this._nodes.fullScreenButton = this._getButton("Full Screen")
+    this._nodes.resetButton.addEventListener('click', this._resetScales.bind(this))
+    this._nodes.fullScreenButton.addEventListener('click', this.swapFullScreen.bind(this))
 
     this._nodes.menu = document.createElement('div')
     this._nodes.menu.classList.add(
         'd-flex', 'border-top', 'border-secondary', 'p-2',
-        'input-group', 'input-group-sm', 'justify-content-center')
-
-    this._nodes.resetButton = this._getButton("Reset Scales")
-    this._nodes.fullScreenButton = this._getButton("Full Screen")
-
-
+        'input-group', 'input-group-sm', 'justify-content-center'
+    )
     this._nodes.menu.appendChild(this._nodes.resetButton)
     this._nodes.menu.appendChild(this._nodes.fullScreenButton)
-    this._nodes.resetButton.addEventListener('click', this._resetScales.bind(this))
-    this._nodes.fullScreenButton.addEventListener('click', this.swapFullScreen.bind(this))
 
-    this._nodes.base.appendChild(this._nodes.chartContainer)
-    this._nodes.base.appendChild(this._nodes.menu)
+    this._nodes.container.appendChild(this._nodes.chartContainer)
+    this._nodes.container.appendChild(this._nodes.menu)
+
     return this._nodes.base
   }
 
