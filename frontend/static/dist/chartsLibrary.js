@@ -25,6 +25,7 @@ export class DefaultChart {
   constructor (chartName = null) {
     this.initConfigs()
     if (chartName) this.config.options.plugins.title.text= chartName
+    if (!chartName) this.config.options.plugins.title.display = false
     this.node = document.createElement('canvas')
     this._chart = new Chart(this.node, this.config)
   }
