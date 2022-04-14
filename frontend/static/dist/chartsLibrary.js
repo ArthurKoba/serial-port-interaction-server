@@ -5,10 +5,20 @@ export class DefaultChart {
   config = {
     type: 'line', data: {},
     options: {
+      radius: 0,
       responsive: true,
-      plugins: {legend: false, title: {display: true, text: 'Chart'}},
-      elements: {bar: {}, line: {}},
-      scales: {y: {}}
+      plugins: {
+        legend: false, title: {
+          display: true, text: 'Chart'
+        }
+      },
+      elements: {
+        bar: {},
+        line: {
+          borderColor: "rgba(0, 255, 0, 1)",
+          borderWidth: 1
+        }},
+      scales: {y: {}, x: {}}
     }
   }
 
@@ -19,12 +29,7 @@ export class DefaultChart {
     this._chart = new Chart(this.node, this.config)
   }
 
-  initConfigs () {
-    this.config.type = "line"
-    this.config.options.radius = 0
-    this.config.options.elements.line.borderColor = "rgba(0, 255, 0, 1)"
-    this.config.options.elements.line.borderWidth = 1
-  }
+  initConfigs () { }
 
   _updateData (labels, values) {
     let convertData = this.convertData(labels, values)

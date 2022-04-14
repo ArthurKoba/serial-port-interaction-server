@@ -7,14 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Pragma" content="no-cache" />
 
-    <link href="/static/plugins/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/styles.css" rel="stylesheet">
     <link rel="icon" href="/static/dist/icon.png">
+    <link href="/static/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/plugins/fontawesome/all.min.css">
+    <link href="/static/plugins/bootstrap.min.css" rel="stylesheet">
 
   </head>
-  <body class="dark-theme">
-    <header class="d-flex align-items-center p-1 border-bottom">
-      <div class="w-100 text-center"> <h2>Serial Port Interaction</h2></div>
+  <body class="dark-mode display-4">
+    <header class="d-flex align-items-center p-1 border-bottom border-secondary rounded">
+      <div class="w-100 text-center"> Serial Port Interaction</div>
+      <div class="dark-mode-swaper"><i class="fas fa-moon"></i></div>
     </header>
     <main>
       <div id="charts" class="row m-2 justify-content-around"></div>
@@ -23,6 +25,7 @@
 
     </footer>
     <script type="module" src="/static/dist/reloader.js"></script>
+    <script type="module" src="/static/dist/darkModeSwaper.js"></script>
     <script type="text/javascript" src="/static/plugins/chart.js"></script>
     <script type="module" src="/static/main.js"></script>
 

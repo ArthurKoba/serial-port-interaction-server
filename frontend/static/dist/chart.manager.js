@@ -9,35 +9,51 @@ class ManagedChart {
   }
 
   _render() {
-    let node = document.createElement('div')
-    node.classList.add('chart', 'col-6', 'p-2', 'd-none')
-    this._nodes.title = document.createElement('div')
-    this._nodes.title.classList.add('title', 'text-center')
-    node.appendChild(this._nodes.title)
-    node.appendChild(this._chart.node)
+    this._nodes.base = document.createElement('div')
+    this._nodes.base.classList.add(
+        'chart','border', 'border-secondary', 'rounded','col-6', 'p-0', 'd-none')
+
+    this._nodes.chartContainer = document.createElement('div')
+    this._nodes.chartContainer.classList.add('p-2')
+    this._nodes.chartContainer.appendChild(this._chart.node)
+
+
+
     this._nodes.menu = document.createElement('div')
-    this._nodes.menu.classList.add('d-flex')
+    this._nodes.menu.classList.add(
+        'd-flex', 'border-top', 'border-secondary', 'p-2',
+        'input-group', 'input-group-sm', 'justify-content-center')
 
-    this._nodes.resetMenu = document.createElement('div')
-    this._nodes.resetMenu.classList.add('input-group', 'input-group-sm', 'justify-content-center')
-    this._nodes.resetButton = document.createElement('button')
-    this._nodes.resetButton.classList.add('btn', 'input-group-sm')
-    this._nodes.resetButton.innerHTML = "Reset Scales"
+    this._nodes.resetButton = this._getButton("Reset Scales")
+    this._nodes.fullScreenButton = this._getButton("Full Screen")
 
 
-    this._nodes.resetMenu.appendChild(this._nodes.resetButton)
+    this._nodes.menu.appendChild(this._nodes.resetButton)
+    this._nodes.menu.appendChild(this._nodes.fullScreenButton)
     this._nodes.resetButton.addEventListener('click', this._resetScales.bind(this))
-    this._nodes.menu.appendChild(this._nodes.resetMenu)
+    this._nodes.fullScreenButton.addEventListener('click', this.swapFullScreen.bind(this))
 
-
-    node.appendChild(this._nodes.menu)
-    return node
+    this._nodes.base.appendChild(this._nodes.chartContainer)
+    this._nodes.base.appendChild(this._nodes.menu)
+    return this._nodes.base
   }
 
   _resetScales (event) {
     let scales = this._chart.config.options.scales.y
     scales.min = null
     scales.max = null
+  }
+
+  _getButton(text) {
+    let button = document.createElement('button')
+    button.classList.add('m-1', 'btn', 'input-group-sm', 'btn-outline-secondary')
+    button.innerHTML = text
+    return button
+  }
+
+  swapFullScreen() {
+    this._nodes.base.classList.toggle('col-6')
+    this._nodes.base.classList.toggle('col-12')
   }
 
   show () {
