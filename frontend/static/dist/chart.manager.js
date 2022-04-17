@@ -3,12 +3,12 @@ class ManagedChart {
   _isHided = true
   _isUpdatable = false
 
-  constructor (chart) {
+  constructor (chart, menuNotActiva) {
     this._chart = chart
-    this.node = this._render()
+    this.node = this._render(menuNotActiva)
   }
 
-  _render() {
+  _render(menuNotActiva) {
     this._nodes.base = document.createElement('div')
     this._nodes.base.classList.add('chart','col-6', 'p-0', 'd-none')
 
@@ -19,22 +19,23 @@ class ManagedChart {
     this._nodes.chartContainer = document.createElement('div')
     this._nodes.chartContainer.classList.add('p-2')
     this._nodes.chartContainer.appendChild(this._chart.node)
-
-    this._nodes.resetButton = this._getButton("Reset Scales")
-    this._nodes.fullScreenButton = this._getButton("Full Screen")
-    this._nodes.resetButton.addEventListener('click', this._resetScales.bind(this))
-    this._nodes.fullScreenButton.addEventListener('click', this.swapFullScreen.bind(this))
-
-    this._nodes.menu = document.createElement('div')
-    this._nodes.menu.classList.add(
-        'd-flex', 'border-top', 'border-secondary', 'p-2',
-        'input-group', 'input-group-sm', 'justify-content-center'
-    )
-    this._nodes.menu.appendChild(this._nodes.resetButton)
-    this._nodes.menu.appendChild(this._nodes.fullScreenButton)
-
     this._nodes.container.appendChild(this._nodes.chartContainer)
-    this._nodes.container.appendChild(this._nodes.menu)
+
+    if (!menuNotActiva) {
+      this._nodes.resetButton = this._getButton("Reset Scales")
+      this._nodes.fullScreenButton = this._getButton("Full Screen")
+      this._nodes.resetButton.addEventListener('click', this._resetScales.bind(this))
+      this._nodes.fullScreenButton.addEventListener('click', this.swapFullScreen.bind(this))
+      this._nodes.menu = document.createElement('div')
+      this._nodes.menu.classList.add(
+          'd-flex', 'border-top', 'border-secondary', 'p-2',
+          'input-group', 'input-group-sm', 'justify-content-center'
+      )
+      this._nodes.menu.appendChild(this._nodes.resetButton)
+      this._nodes.menu.appendChild(this._nodes.fullScreenButton)
+      this._nodes.container.appendChild(this._nodes.menu)
+    }
+
 
     return this._nodes.base
   }
@@ -78,11 +79,16 @@ export class ChartManager {
   constructor (serialWebSocket) {
     this.serialWebSocket = serialWebSocket
     this.node = document.getElementById("charts")
+    this.isDeactiveMenus = false
     this.startChartsActualityLoop()
   }
 
+  deactivateMenus() {
+    this.isDeactiveMenus = true
+  }
+
   createChart (chartClass, dataType , name) {
-    let managerChart = new ManagedChart(new chartClass(name))
+    let managerChart = new ManagedChart(new chartClass(name), this.isDeactiveMenus)
 
     if (dataType) {
       this.serialWebSocket.registerHandlerObject(dataType, managerChart._chart)
