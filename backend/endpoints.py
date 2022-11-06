@@ -12,6 +12,7 @@ def get_index_page() -> HTMLResponse:
     except FileNotFoundError:
         return HTMLResponse(content=None, status_code=404)
 
+
 @app.get("/ping", response_class=JSONResponse)
 def ping() -> JSONResponse:
     return JSONResponse(content={'status': True}, status_code=200)
