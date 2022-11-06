@@ -17,8 +17,11 @@ export function FFT (AVal) {
   i = 1, j = 1
   while (i < n) {
     if (j > i) {
-      Tmpr = Tmvl[i]; Tmvl[i] = Tmvl[j]; Tmvl[j] = Tmpr;
-      Tmpr = Tmvl[i+1]; Tmvl[i+1] = Tmvl[j+1]; Tmvl[j+1] = Tmpr;
+      Tmpr = Tmvl[i];
+      Tmvl[i] = Tmvl[j];
+      Tmvl[j] = Tmpr;
+      Tmpr = Tmvl[i+1];
+      Tmvl[i+1] = Tmvl[j+1]; Tmvl[j+1] = Tmpr;
     }
     i = i + 2; m = Nvl;
     while ((m >= 2) && (j > m)) {
