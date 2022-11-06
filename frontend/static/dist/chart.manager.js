@@ -40,7 +40,7 @@ class ManagedChart {
     return this._nodes.base
   }
 
-  _resetScales (event) {
+  _resetScales () {
     let scales = this._chart.config.options.scales.y
     scales.min = null
     scales.max = null
@@ -80,7 +80,10 @@ export class ChartManager {
     this.serialWebSocket = serialWebSocket
     this.node = document.getElementById("charts")
     this.isDeactiveMenus = false
-    this.startChartsActualityLoop()
+    this.isAutoDeactivate = true
+    this.isChartActualityLoopStarted = false
+    this._loop().then(r => (r))
+
   }
 
   deactivateMenus() {
@@ -102,15 +105,16 @@ export class ChartManager {
   checkChartsActuality() {
     for (let managedChart of this.charts) {
       if (managedChart._isUpdatable && managedChart._chart.lastUpdate < performance.now() - 200) {
-        managedChart.hide()
+        if (!this.isAutoDeactivate)
+          managedChart.hide()
       } else {
         managedChart.show()
       }
     }
   }
 
-  async startChartsActualityLoop (sleepTime = 200) {
-    while (true) {
+  async _loop (sleepTime = 200) {
+    while (this.isChartActualityLoopStarted) {
       await (new Promise(res => setTimeout(res, sleepTime)))
       this.checkChartsActuality()
     }
