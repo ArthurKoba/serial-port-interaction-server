@@ -1,7 +1,9 @@
 from typing import List
 from asyncio import gather
 from fastapi import WebSocket
-from websockets.exceptions import ConnectionClosedError
+
+WebSocketMessage = bytes | str
+
 
 class WebSocketConnectionManager:
     def __init__(self) -> None:
@@ -14,15 +16,13 @@ class WebSocketConnectionManager:
     def disconnect(self, websocket: WebSocket) -> None:
         self.active_connections.remove(websocket)
 
-    async def send_personal_message(self, message: str, websocket: WebSocket) -> None:
+    @staticmethod
+    async def send_personal_message(message: WebSocketMessage, websocket: WebSocket) -> None:
         await websocket.send_text(message)
 
-    async def broadcast(self, message: str) -> None:
+    async def broadcast(self, message: WebSocketMessage) -> None:
         tasks = [
                 self.send_personal_message(message, websocket)
                 for websocket in self.active_connections
         ]
-        try:
-            await gather(*tasks)
-        except Exception:
-            pass
+        await gather(*tasks)
