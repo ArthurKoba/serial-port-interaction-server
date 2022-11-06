@@ -72,12 +72,19 @@ export class DefaultChart {
 
 }
 
-export class FourierSeriesChart extends DefaultChart {
+
+export class BarSeriesChart extends DefaultChart {
+  initConfigs () {
+    this.config.type = "bar"
+    this.config.options.elements.bar.backgroundColor = "rgba(255, 0, 255, 1)"
+  }
+}
+
+export class FourierSeriesChart extends BarSeriesChart {
   initConfigs () {
     this.config.type = "bar"
     this.config.options.elements.bar.backgroundColor = this.getColor.bind(this)
   }
-
   getColor(context) {
     if (context.index < this.dataLength/3) return "rgba(255, 0, 0, 1)"
     else if (context.index < this.dataLength*2/3) return "rgba(0, 255, 0, 1)"
