@@ -9,7 +9,9 @@ def start() -> None:
         port=config.getint('Server', 'port'),
         log_level="warning",
         reload_includes=["*.html", '*.js', '*.css'],
-        reload=True
+        reload=True,
+        ws_ping_interval=10,
+        ws_ping_timeout=10
     )
 
 
