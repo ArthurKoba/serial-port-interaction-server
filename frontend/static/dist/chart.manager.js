@@ -3,14 +3,15 @@ class ManagedChart {
   _isHided = true
   _isUpdatable = false
 
-  constructor (chart, menuNotActiva) {
+
+  constructor (chart, menuNotActiva, fullscreen = false) {
     this._chart = chart
-    this.node = this._render(menuNotActiva)
+    this.node = this._render(menuNotActiva, fullscreen)
   }
 
-  _render(menuNotActiva) {
+  _render(menuNotActiva, isDefaultFullscreen) {
     this._nodes.base = document.createElement('div')
-    this._nodes.base.classList.add('chart','col-6', 'p-0', 'd-none')
+    this._nodes.base.classList.add('chart', isDefaultFullscreen ? 'col-12' : 'col-6', 'p-0', 'd-none')
 
     this._nodes.container = document.createElement('div')
     this._nodes.container.classList.add('m-1', 'border', 'border-secondary', 'rounded')
@@ -70,7 +71,9 @@ class ManagedChart {
     this._isHided = true
   }
 
+  getChart() {return this._chart }
   updateData(values) { this._chart.dataHandler(values) }
+  updateLabels(labels) {  this._chart.dataHandler(values) }
 }
 
 export class ChartManager {
@@ -81,6 +84,7 @@ export class ChartManager {
     this.node = document.getElementById("charts")
     this.isDeactiveMenus = false
     this.isChartsActualityActive = true
+    this.isDefaultFullscreen = false
     this.startChartsActualityLoop().then(r => r)
   }
 
@@ -89,8 +93,7 @@ export class ChartManager {
   }
 
   createChart (chartClass, dataType , name) {
-    let managerChart = new ManagedChart(new chartClass(name), this.isDeactiveMenus)
-
+    let managerChart = new ManagedChart(new chartClass(name), this.isDeactiveMenus, this.isDefaultFullscreen)
     if (dataType) {
       this.serialWebSocket.registerHandlerObject(dataType, managerChart._chart)
       managerChart._isUpdatable = true
@@ -110,7 +113,7 @@ export class ChartManager {
     }
   }
 
-  async startChartsActualityLoop (sleepTime = 200) {
+  async startChartsActualityLoop (sleepTime = 1000) {
     while (this.isChartsActualityActive) {
       await (new Promise(res => setTimeout(res, sleepTime)))
       this.checkChartsActuality()
