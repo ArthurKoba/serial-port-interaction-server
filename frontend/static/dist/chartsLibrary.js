@@ -92,3 +92,38 @@ export class FourierSeriesChart extends BarSeriesChart {
     else return "rgba(0, 0, 0, 1)"
   }
 }
+
+export class FourierWithFreqSeriesChart extends FourierSeriesChart {
+  initConfigs () {
+    this.config.type = "bar"
+    this.config.options.elements.bar.backgroundColor = this.getColor.bind(this)
+    this.SamplingFrequency = 44100
+    this.SamplesSize = null
+  }
+
+
+
+  dataHandler(data) {
+    if (this.SamplesSize === null) this.SamplesSize = data.length
+    let labels = []
+    let values = []
+
+    let freq;
+    for (let index = 0; index < data.length; index++) {
+      freq = index * (1/(this.SamplesSize/this.SamplingFrequency))
+      freq = Math.round(freq)
+
+      switch (freq.toString().length) {
+        case 4: case 5: freq = (Math.round(freq*10/1000)/10).toString()+"k"
+      }
+      // labels.push(freq)
+      labels.push(`${freq} (${index})`)
+      values.push(data[index])
+    }
+    this._updateData(labels, values)
+  }
+
+  setSamplingFrequency(value) { this.SamplingFrequency = value }
+  setSamplesSize(value) { this.SamplesSize = value }
+
+}
