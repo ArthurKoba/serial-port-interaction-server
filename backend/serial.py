@@ -103,7 +103,8 @@ class SerialManager:
         except SerialException:
             self._is_connected = False
         except:
-            logger.info(msg)
+            text = msg.decode("utf-8")
+            logger.info(text.replace("\n", ""))
     @property
     def is_connected(self) -> bool:
         return self._is_connected
