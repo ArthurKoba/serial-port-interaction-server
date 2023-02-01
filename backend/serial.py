@@ -2,6 +2,7 @@ from typing import Optional, Dict, Sequence, Iterable
 from asyncio import sleep
 from asyncio.streams import StreamReader, StreamWriter
 from random import choice
+from json import loads
 
 from serial_asyncio import open_serial_connection
 from serial.serialutil import SerialException
@@ -96,15 +97,16 @@ class SerialManager:
     async def _read_message(self) -> None:
         try:
             msg = await self._reader.readuntil(b'\n')
+            loads(msg)
             await self._handle_message(msg)
             logger.debug(f"{self._port} | {msg}")
         except SerialException:
             self._is_connected = False
-
+        except:
+            logger.info(msg)
     @property
     def is_connected(self) -> bool:
         return self._is_connected
 
     def __del__(self):
         pass
-
