@@ -24,6 +24,7 @@ logging.getLogger("asyncio").setLevel(logging.INFO)
 
 main_logger = logging.getLogger("main")
 serial_logger = logging.getLogger("serial")
+generator = logging.getLogger("generator")
 
 serial_logger.setLevel(logging.INFO)
 

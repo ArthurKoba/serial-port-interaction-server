@@ -7,11 +7,13 @@ from .loggers import main_logger
 from .websockets.manager import WebSocketConnectionManager
 from .serial import SerialManager
 from .utils import exception_handler
+from .generator import Generator
 
 config = get_config()
 
 app = FastAPI()
 websocket_manager = WebSocketConnectionManager()
+generator = Generator(websocket_manager=websocket_manager)
 serial_manager = SerialManager(
     websocket_manager=websocket_manager,
     baudrate=config.get('Serial', 'baudrate'),
@@ -26,6 +28,7 @@ async def start_serial_manager() -> None:
     loop.set_exception_handler(exception_handler)
     main_logger.info("Start Server")
     loop.create_task(serial_manager.start())
+    # loop.create_task(generator.start())
 
 
 app.mount("/static", StaticFiles(directory=config.get('Server', 'static_directory_path')), name="static")
