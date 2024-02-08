@@ -5,9 +5,17 @@ export class DefaultChart {
   config = {
     type: 'line', data: {},
     options: {
+      // parsing: false,
+      animation: false,
+      normalized: false,
       radius: 0,
       responsive: true,
       plugins: {
+        decimation: {
+          enabled: true,
+          algorithm: 'lttb',
+          samples: '50',
+        },
         legend: false, title: {
           display: true, text: 'Chart'
         }
